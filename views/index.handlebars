@@ -1,0 +1,68 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            {{#each burgers }}
+            <p>{{burgerName}}<button id={{id}} class="devour">Devour!</button></p>
+            {{/each}}
+        </div>
+        <div class="col-md-4">
+            <img style="width: 100%"
+                src="https://www.seriouseats.com/recipes/images/2015/07/20150702-sous-vide-hamburger-anova-primary-1500x1125.jpg" />
+        </div>
+        <div class="col-md-4">
+            {{#each devouredBurgers }}
+            <p>{{burgerName}}</p>
+            {{/each}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form class="create-form">
+                <div class="form-group">
+                    <label for="usr">Add a Burger</label>
+                    <input id="input" type="text" class="form-control" id="burger">
+                    <button id="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    $(".devour").on("click", function () {
+        chosen = {
+            id: $(this).attr("id"),
+        }
+        $.ajax("/api/devour", {
+            type: "POST",
+            data: chosen
+        }).then(
+            function () {
+                console.log("hellow");
+                location.reload();
+            }
+        );
+    });
+
+    $(".create-form").on("submit", function(event) {
+
+    event.preventDefault();
+
+    var burger = {
+      burger: $("#input").val().trim(),  
+    };
+
+    // Send the POST request.
+    $.ajax("/api/burgers", {
+      type: "POST",
+      data: burger
+    }).then(
+      function() {
+        window.location.reload(true)
+      }
+    );
+  });
+</script>
